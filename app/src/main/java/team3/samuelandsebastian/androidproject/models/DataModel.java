@@ -15,15 +15,7 @@ public class DataModel {
         return word;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
     public ArrayList<Result> getResults() {
         return results;
-    }
-
-    public void setResults(ArrayList<Result> results) {
-        this.results = results;
     }
 }
