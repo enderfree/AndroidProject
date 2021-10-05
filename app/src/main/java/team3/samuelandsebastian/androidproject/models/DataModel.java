@@ -1,12 +1,12 @@
 package team3.samuelandsebastian.androidproject.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DataModel {
     private String word;
-    private ArrayList<Result> results;
+    private List<Result> results;
 
-    public DataModel(String word, ArrayList<Result> results) {
+    public DataModel(String word, List<Result> results) {
         this.word = word;
         this.results = results;
     }
@@ -15,7 +15,7 @@ public class DataModel {
         return word;
     }
 
-    public ArrayList<Result> getResults() {
+    public List<Result> getResults() {
         return results;
     }
 }
