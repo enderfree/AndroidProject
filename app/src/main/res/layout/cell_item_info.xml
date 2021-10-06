@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtViewWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="1. Word"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtViewPart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="280dp"
+        android:layout_marginEnd="20dp"
+        android:text="noun"
+        app:layout_constraintBottom_toBottomOf="@+id/txtViewWord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/txtViewWord"
+        app:layout_constraintTop_toTopOf="@+id/txtViewWord"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtViewDefinition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Definition: A word is a word"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewPart"
+        app:layout_constraintStart_toStartOf="@+id/txtViewWord"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewWord" />
+
+    <TextView
+        android:id="@+id/txtViewSynonyms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Synonyms: car, toilet, bed"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewDefinition"
+        app:layout_constraintStart_toStartOf="@+id/txtViewDefinition"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewDefinition" />
+
+    <TextView
+        android:id="@+id/txtViewExamples"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Examples: You said this word!"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewSynonyms"
+        app:layout_constraintStart_toStartOf="@+id/txtViewSynonyms"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewSynonyms" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
