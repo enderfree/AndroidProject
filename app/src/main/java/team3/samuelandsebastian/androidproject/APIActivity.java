@@ -1,6 +1,5 @@
 package team3.samuelandsebastian.androidproject;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -32,8 +31,8 @@ import team3.samuelandsebastian.androidproject.models.Result;
 
 public class APIActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button searchBtn;
-    private EditText txtWord;
+    private Button buttonSrch;
+    private EditText editTextWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +42,23 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void init() {
-        searchBtn = findViewById(R.id.searchBtn);
-        txtWord = findViewById(R.id.txtWord);
+        buttonSrch = findViewById(R.id.buttonSrch);
+        editTextWord = findViewById(R.id.txtWord);
 
-        searchBtn.setOnClickListener(this);
+        buttonSrch.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.searchBtn:
+            case R.id.buttonSrch:
                 callWordApi();
                 break;
         }
     }
 
     private void callWordApi() {
-        String word = txtWord.getText().toString();
+        String word = editTextWord.getText().toString();
 
         if(word.isEmpty()) {
             Toast.makeText(getBaseContext(), "You need to enter a word", Toast.LENGTH_SHORT).show();

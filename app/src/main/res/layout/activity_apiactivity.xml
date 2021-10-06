@@ -7,7 +7,7 @@
     tools:context=".APIActivity">
 
     <Button
-        android:id="@+id/searchBtn"
+        android:id="@+id/buttonSrch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
@@ -24,8 +24,8 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="Word"
-        app:layout_constraintBottom_toTopOf="@+id/searchBtn"
-        app:layout_constraintEnd_toEndOf="@+id/searchBtn"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSrch"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSrch"
         app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="@+id/searchBtn" />
+        app:layout_constraintStart_toStartOf="@+id/buttonSrch" />
 </androidx.constraintlayout.widget.ConstraintLayout>
