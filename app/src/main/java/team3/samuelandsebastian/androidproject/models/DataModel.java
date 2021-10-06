@@ -1,8 +1,9 @@
 package team3.samuelandsebastian.androidproject.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DataModel {
+public class DataModel implements Serializable {
     private String word;
     private List<Result> results;
 

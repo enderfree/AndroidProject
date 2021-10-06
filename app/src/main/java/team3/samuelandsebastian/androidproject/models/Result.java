@@ -1,8 +1,9 @@
 package team3.samuelandsebastian.androidproject.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Result {
+public class Result implements Serializable {
     private String partOfSpeech; //noun, adj, adv
     private String definition;
     private List<String> synonyms;

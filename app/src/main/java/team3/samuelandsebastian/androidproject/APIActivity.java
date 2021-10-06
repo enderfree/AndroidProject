@@ -2,6 +2,7 @@ package team3.samuelandsebastian.androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -121,7 +122,11 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                 for(int i = 0; i < dataModel.getResults().size(); i++) {
                     Log.i("Definition #" + (i + 1), dataModel.getResults().get(i).getDefinition());
                 }
-                // TODO: Send user to Model Activity
+
+                Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
+                intent.putExtra("data", dataModel);
+                startActivity(intent);
+
             }
 
             @Override
