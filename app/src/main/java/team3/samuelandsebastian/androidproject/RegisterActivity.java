@@ -1,7 +1,9 @@
 package team3.samuelandsebastian.androidproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,8 +52,38 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void buttonRegisterAction(){
+    private void displayOkDialog(AlertDialog.Builder dialog){
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //disappear
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
 
+    private void buttonRegisterAction(){
+        ///validate data
+        //Show error message
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Invalid Registration");
+
+        if(editTextFirstName.getText() == null && editTextLastName.getText() == null && editTextEMail.getText() == null && editTextPassword == null && editTextPasswordConfirmation != null){
+            dialog.setMessage("message");
+            displayOkDialog(dialog);
+            return;
+        }
+
+        if(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+")){
+            dialog.setMessage("message");
+            displayOkDialog(dialog);
+            return;
+        }
+
+        //I don't check email further since firebase will do it for us
+
+        //need access to db in order to check uniqueness of password
     }
 
     private void buttonCancelAction(){
