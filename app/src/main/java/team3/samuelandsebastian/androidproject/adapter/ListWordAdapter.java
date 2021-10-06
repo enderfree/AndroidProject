@@ -30,10 +30,6 @@ public class ListWordAdapter extends ArrayAdapter<Result> {
         return currentSelectedCell;
     }
 
-    public void setCurrentSelectedCell(int currentSelectedCell) {
-        this.currentSelectedCell = currentSelectedCell;
-    }
-
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
