@@ -75,13 +75,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+")){
+        if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
             dialog.setMessage("message");
             displayOkDialog(dialog);
             return;
         }
 
-        //I don't check email further since firebase will do it for us
+        if(!editTextPassword.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
+            dialog.setMessage("message");
+            displayOkDialog(dialog);
+            return;
+        }
 
         //need access to db in order to check uniqueness of password
     }
