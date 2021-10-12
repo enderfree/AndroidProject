@@ -1,24 +1,42 @@
 package team3.samuelandsebastian.androidproject.models;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.UUID;
+
+import androidx.annotation.NonNull;
 import team3.samuelandsebastian.androidproject.service.FirebaseDAO;
 
 public class User {
     private static String collectionName = "Users";
 
+    private String id;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String password;
 
     public User(String firstName, String lastName, String emailAddress, String password) {
+        this.id = UUID.randomUUID().toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
     }
 
     public static String getCollectionName() {
@@ -45,7 +63,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    @Exclude
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -68,18 +85,31 @@ public class User {
         return firebase.child(collectionName).child(emailAddress).setValue(this);
     }
 
-    public static User getUserByEmail(String emailAddress){
+    private static boolean unique = true;
+    public static boolean findIfEMailIsUnique(String emailAddress){
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
 
-        try{
-            String firstName = firebase.child(collectionName).child(emailAddress).child("firstName").toString();
-            String lastName = firebase.child(collectionName).child(emailAddress).child("lastName").toString();
-            String password = firebase.child(collectionName).child(emailAddress).child("password").toString();
 
-            return new User(firstName, lastName, emailAddress, password);
+        firebase.child(collectionName).orderByKey().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("emailAddress").toString().equals(emailAddress)){
+                    unique = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        if (unique){
+            return true;
         }
-        catch (Exception e){
-            return null;
-        }
+
+        unique = true;
+
+        return false;
     }
 }

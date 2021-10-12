@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             displayOkDialog(dialog);
             return;
         }
-        else if(User.getUserByEmail(editTextEMail.getText().toString()) != null){
+        else if(!User.findIfEMailIsUnique(editTextEMail.getText().toString())){
             dialog.setMessage("Don't you already have an account?");
             displayOkDialog(dialog);
             return;
@@ -107,10 +107,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             String email = editTextEMail.getText().toString();
             String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-            new User(firstName, lastName, email, password).insert().addOnFailureListener(error -> {
-                Log.i("Insert Fail", error.getMessage());
-            });
-
+            new User(firstName, lastName, email, password).insert();
             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
 
             Intent intent = new Intent(this, MainActivity.class);
