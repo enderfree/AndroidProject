@@ -10,22 +10,35 @@
         android:id="@+id/buttonSrch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="4dp"
         android:text="Search"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/txtWord"
+        app:layout_constraintStart_toStartOf="@+id/txtWord"
+        app:layout_constraintTop_toBottomOf="@+id/txtWord" />
 
     <EditText
         android:id="@+id/txtWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="Word"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSrch"
-        app:layout_constraintEnd_toEndOf="@+id/buttonSrch"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="@+id/buttonSrch" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/chBoxSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="155dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="@+id/txtWord"
+        app:layout_constraintStart_toStartOf="@+id/txtWord"
+        app:layout_constraintTop_toBottomOf="@+id/txtWord" />
 </androidx.constraintlayout.widget.ConstraintLayout>

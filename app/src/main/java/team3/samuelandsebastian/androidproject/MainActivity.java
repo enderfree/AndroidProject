@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openAPIActivity() {
-        Intent intent = new Intent(this, APIActivity.class);
+        Intent intent = new Intent(this, MainApiActivity.class);
         startActivity(intent);
     }
 }

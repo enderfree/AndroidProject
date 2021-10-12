@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -35,6 +35,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
 
     private Button buttonSrch;
     private EditText editTextWord;
+    private CheckBox chBoxSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
     private void init() {
         buttonSrch = findViewById(R.id.buttonSrch);
         editTextWord = findViewById(R.id.txtWord);
-
+        chBoxSave = findViewById(R.id.chBoxSave);
         buttonSrch.setOnClickListener(this);
     }
 
@@ -124,17 +125,18 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                     Log.i("Definition #" + (i + 1), word.getResults().get(i).getDefinition());
                 }
 
-                word.upsert().addOnSuccessListener(success -> {
-                    Toast.makeText(getBaseContext(), "Word Saved!\n" + word.getId(), Toast.LENGTH_LONG).show();
-                }).addOnFailureListener(error -> {
-                    Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.i("Error DB", error.getMessage());
-                });
+                if(chBoxSave.isChecked()) {
+                    word.insert().addOnSuccessListener(success -> {
+                        Toast.makeText(getBaseContext(), "Word Saved!\n" + word.getId(), Toast.LENGTH_LONG).show();
+                    }).addOnFailureListener(error -> {
+                        Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.i("Error DB", error.getMessage());
+                    });
+                }
 
                 Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
                 intent.putExtra("data", word);
                 startActivity(intent);
-
             }
 
             @Override
