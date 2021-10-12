@@ -18,15 +18,17 @@ public class Word implements Serializable {
     private static String collectionName = "Words";
 
     private String word;
-    private List<WordResult> wordResults;
-    private long time;
+    private List<WordResult> results;
+    private long timeInMillis;
     private String id;
 
-    public Word(String word, List<WordResult> wordResults) {
+    public Word(String word, List<WordResult> results) {
         this.word = word;
-        this.wordResults = wordResults;
-        this.time = System.currentTimeMillis();
+        this.results = results;
+        this.timeInMillis = System.currentTimeMillis();
     }
+
+    public Word() {}
 
     public String getId() {
         return id;
@@ -35,12 +37,12 @@ public class Word implements Serializable {
     @Exclude
     public String getDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CANADA);
-        Date date = new Date(this.time);
+        Date date = new Date(this.timeInMillis);
         return sdf.format(date);
     }
 
     public long getTimeInMillis() {
-        return this.time;
+        return this.timeInMillis;
     }
 
     public String getWord() {
@@ -48,7 +50,7 @@ public class Word implements Serializable {
     }
 
     public List<WordResult> getResults() {
-        return wordResults;
+        return results;
     }
 
     public Task<Void> insert() {

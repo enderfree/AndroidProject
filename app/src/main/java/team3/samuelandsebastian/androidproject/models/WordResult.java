@@ -16,6 +16,8 @@ public class WordResult implements Serializable {
         this.examples = examples;
     }
 
+    public WordResult() {}
+
     public String getPartOfSpeech() {
         return partOfSpeech;
     }
