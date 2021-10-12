@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -94,7 +95,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
 
                 JsonParser parser = new JsonParser();
                 JsonObject json = (JsonObject) parser.parse(jsonString);
-                Word word = null;
+                Word word;
                 try {
                     JsonArray results = json.getAsJsonArray("results");
                     List<WordResult> wordResultList = new ArrayList<>();
@@ -122,6 +123,13 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                 for(int i = 0; i < word.getResults().size(); i++) {
                     Log.i("Definition #" + (i + 1), word.getResults().get(i).getDefinition());
                 }
+
+                word.upsert().addOnSuccessListener(success -> {
+                    Toast.makeText(getBaseContext(), "Word Saved!\n" + word.getId(), Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(error -> {
+                    Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.i("Error DB", error.getMessage());
+                });
 
                 Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
                 intent.putExtra("data", word);
