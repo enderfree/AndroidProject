@@ -70,6 +70,6 @@ public class Word implements Serializable {
 
     public static Query findAll() {
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
-        return firebase.child(collectionName).orderByKey();
+        return firebase.child(collectionName).orderByChild("timeInMillis");
     }
 }

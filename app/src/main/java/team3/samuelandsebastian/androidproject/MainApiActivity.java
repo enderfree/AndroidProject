@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import team3.samuelandsebastian.androidproject.adapter.RecyclerAdapter;
 import team3.samuelandsebastian.androidproject.models.Word;
@@ -55,11 +56,13 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                words.clear();
                 for(DataSnapshot snap : snapshot.getChildren()) {
                     Word word = snap.getValue(Word.class);
                     Log.i("Word: ", word.getWord());
                     words.add(snap.getValue(Word.class));
                 }
+                Collections.reverse(words);
                 recyclerAdapter.notifyDataSetChanged();
             }
 
