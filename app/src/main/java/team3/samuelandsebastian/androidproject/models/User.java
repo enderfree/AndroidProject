@@ -34,11 +34,11 @@ public class User {
         return id;
     }
 
-    @Exclude
     public void setId(String id) {
         this.id = id;
     }
 
+    @Exclude
     public static String getCollectionName() {
         return collectionName;
     }
@@ -82,7 +82,7 @@ public class User {
     public Task<Void> insert(){
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
 
-        return firebase.child(collectionName).child(emailAddress).setValue(this);
+        return firebase.child(collectionName).child(id).setValue(this);
     }
 
     private static boolean unique = true;
@@ -93,8 +93,10 @@ public class User {
         firebase.child(collectionName).orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("emailAddress").toString().equals(emailAddress)){
-                    unique = false;
+                for (DataSnapshot user: snapshot.getChildren()){
+                    if(user.child("emailAddress").toString().equals(emailAddress)){
+                        unique =false;
+                    }
                 }
             }
 
