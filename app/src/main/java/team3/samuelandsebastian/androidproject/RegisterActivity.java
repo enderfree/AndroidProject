@@ -7,6 +7,7 @@ import team3.samuelandsebastian.androidproject.models.User;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,10 +107,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             String email = editTextEMail.getText().toString();
             String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-            new User(firstName, lastName, email, password).insert();
+            new User(firstName, lastName, email, password).insert().addOnFailureListener(error -> {
+                Log.i("Insert Fail", error.getMessage());
+            });
+
             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
 
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }
