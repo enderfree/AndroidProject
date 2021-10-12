@@ -10,18 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import team3.samuelandsebastian.androidproject.R;
-import team3.samuelandsebastian.androidproject.models.DataModel;
-import team3.samuelandsebastian.androidproject.models.Result;
+import team3.samuelandsebastian.androidproject.models.Word;
+import team3.samuelandsebastian.androidproject.models.WordResult;
 
-public class ListWordAdapter extends ArrayAdapter<Result> {
+public class ListWordAdapter extends ArrayAdapter<WordResult> {
 
     private int currentSelectedCell = -1;
-    private DataModel model;
+    private Word model;
     private Context context;
 
-    public ListWordAdapter(@NonNull Context context, DataModel dataModel, int currentSelectedCell) {
-        super(context, -1, dataModel.getResults().toArray(new Result[0]));
-        this.model = dataModel;
+    public ListWordAdapter(@NonNull Context context, Word word, int currentSelectedCell) {
+        super(context, -1, word.getResults().toArray(new WordResult[0]));
+        this.model = word;
         this.context = context;
         this.currentSelectedCell = currentSelectedCell;
     }
@@ -41,7 +41,7 @@ public class ListWordAdapter extends ArrayAdapter<Result> {
             if(currentSelectedCell == position) {
                 view = inflater.inflate(R.layout.cell_item_info, null);
                 TextView txtViewDefinition, txtViewPart, txtViewWord, txtViewSynonyms, txtViewExamples;
-                Result result = model.getResults().get(position);
+                WordResult wordResult = model.getResults().get(position);
                 txtViewDefinition = view.findViewById(R.id.txtViewDefinition);
                 txtViewPart = view.findViewById(R.id.txtViewPart);
                 txtViewWord = view.findViewById(R.id.txtViewWord);
@@ -50,25 +50,25 @@ public class ListWordAdapter extends ArrayAdapter<Result> {
 
                 StringBuilder sb = new StringBuilder();
                 txtViewWord.setText((1 + position) + ". " + model.getWord());
-                txtViewPart.setText(result.getPartOfSpeech());
-                txtViewDefinition.setText("Definition: " + result.getDefinition());
+                txtViewPart.setText(wordResult.getPartOfSpeech());
+                txtViewDefinition.setText("Definition: " + wordResult.getDefinition());
 
-                if(result.getSynonyms() != null) {
+                if(wordResult.getSynonyms() != null) {
                     sb.append("Synonyms: ");
-                    for(int i = 0; i < result.getSynonyms().size(); i++) {
+                    for(int i = 0; i < wordResult.getSynonyms().size(); i++) {
                         if(i == 0)
-                            sb.append(result.getSynonyms().get(i));
+                            sb.append(wordResult.getSynonyms().get(i));
                         else
-                            sb.append(", ").append(result.getSynonyms().get(i));
+                            sb.append(", ").append(wordResult.getSynonyms().get(i));
                     }
                     txtViewSynonyms.setText(sb.toString());
                 }
 
                 sb.setLength(0);
 
-                if(result.getExamples() != null) {
-                    for(int i = 0; i < result.getExamples().size(); i++) {
-                        sb.append("Example ").append(i + 1).append(": ").append(result.getExamples().get(i)).append("\n");
+                if(wordResult.getExamples() != null) {
+                    for(int i = 0; i < wordResult.getExamples().size(); i++) {
+                        sb.append("Example ").append(i + 1).append(": ").append(wordResult.getExamples().get(i)).append("\n");
                     }
                     txtViewExamples.setText(sb.toString());
                 } else {

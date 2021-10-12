@@ -3,22 +3,22 @@ package team3.samuelandsebastian.androidproject.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class DataModel implements Serializable {
+public class Word implements Serializable {
     private static String collectionName = "History";
 
     private String word;
-    private List<Result> results;
+    private List<WordResult> wordResults;
 
-    public DataModel(String word, List<Result> results) {
+    public Word(String word, List<WordResult> wordResults) {
         this.word = word;
-        this.results = results;
+        this.wordResults = wordResults;
     }
 
     public String getWord() {
         return word;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<WordResult> getResults() {
+        return wordResults;
     }
 }

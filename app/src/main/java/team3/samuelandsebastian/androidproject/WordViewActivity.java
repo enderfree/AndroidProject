@@ -3,19 +3,18 @@ package team3.samuelandsebastian.androidproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import team3.samuelandsebastian.androidproject.adapter.ListWordAdapter;
-import team3.samuelandsebastian.androidproject.models.DataModel;
+import team3.samuelandsebastian.androidproject.models.Word;
 
 public class WordViewActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ListView wordListView;
     private ListWordAdapter wordAdapter;
-    private DataModel model;
+    private Word model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +25,7 @@ public class WordViewActivity extends AppCompatActivity implements AdapterView.O
     private void init() {
         wordListView = findViewById(R.id.wordListView);
 
-        model = (DataModel) getIntent().getSerializableExtra("data");
+        model = (Word) getIntent().getSerializableExtra("data");
         wordAdapter = new ListWordAdapter(this, model, -1);
         wordListView.setAdapter(wordAdapter);
         wordListView.setOnItemClickListener(this);

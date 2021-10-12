@@ -27,8 +27,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team3.samuelandsebastian.androidproject.api.IWordAPI;
-import team3.samuelandsebastian.androidproject.models.DataModel;
-import team3.samuelandsebastian.androidproject.models.Result;
+import team3.samuelandsebastian.androidproject.models.Word;
+import team3.samuelandsebastian.androidproject.models.WordResult;
 
 public class APIActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,10 +59,10 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void callWordApi() {
-        String word = editTextWord.getText().toString();
+        String wordStr = editTextWord.getText().toString();
 
-        if(word.isEmpty()) {
-            Toast.makeText(getBaseContext(), "You need to enter a word", Toast.LENGTH_SHORT).show();
+        if(wordStr.isEmpty()) {
+            Toast.makeText(getBaseContext(), "You need to enter a wordStr", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -77,7 +77,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
         headers.put("x-rapidapi-host", "wordsapiv1.p.rapidapi.com");
         headers.put("x-rapidapi-key", "758a77b168msh4606f6bf6b1870dp170691jsne214277ce7f6");
 
-        Call<JsonObject> call = iWordAPI.getData(word, headers);
+        Call<JsonObject> call = iWordAPI.getData(wordStr, headers);
 
         call.enqueue(new Callback<JsonObject>() {
 
@@ -94,24 +94,24 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
 
                 JsonParser parser = new JsonParser();
                 JsonObject json = (JsonObject) parser.parse(jsonString);
-                DataModel dataModel = null;
+                Word word = null;
                 try {
                     JsonArray results = json.getAsJsonArray("results");
-                    List<Result> resultList = new ArrayList<>();
+                    List<WordResult> wordResultList = new ArrayList<>();
                     for(int i = 0; i < results.size(); i++) {
                         JsonObject result = results.get(i).getAsJsonObject();
                         String[] synonyms = gson.fromJson(result.getAsJsonArray("synonyms"), String[].class);
                         String[] examples = gson.fromJson(result.getAsJsonArray("examples"), String[].class);
 
-                        Result resultObj = new Result(
+                        WordResult wordResultObj = new WordResult(
                                 result.getAsJsonPrimitive("partOfSpeech").getAsString(),
                                 result.getAsJsonPrimitive("definition").getAsString(),
                                 synonyms != null ? Arrays.asList(synonyms) : null,
                                 examples != null ? Arrays.asList(examples) : null
                         );
-                        resultList.add(resultObj);
+                        wordResultList.add(wordResultObj);
                     }
-                    dataModel = new DataModel(word, resultList);
+                    word = new Word(wordStr, wordResultList);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getBaseContext(), "Error fetching data! \n" + e.toString(), Toast.LENGTH_LONG).show();
@@ -119,12 +119,12 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                 }
 
                 // Added this for testing purposes can delete later...
-                for(int i = 0; i < dataModel.getResults().size(); i++) {
-                    Log.i("Definition #" + (i + 1), dataModel.getResults().get(i).getDefinition());
+                for(int i = 0; i < word.getResults().size(); i++) {
+                    Log.i("Definition #" + (i + 1), word.getResults().get(i).getDefinition());
                 }
 
                 Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
-                intent.putExtra("data", dataModel);
+                intent.putExtra("data", word);
                 startActivity(intent);
 
             }
