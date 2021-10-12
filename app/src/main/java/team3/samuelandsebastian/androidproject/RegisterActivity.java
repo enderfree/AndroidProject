@@ -107,7 +107,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             String email = editTextEMail.getText().toString();
             String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-            new User(firstName, lastName, email, password).insert();
+            try {
+                new User(firstName, lastName, email, password).insert();
+            }
+            catch (Exception e){
+                Log.i("error", e.getMessage());
+            }
+
             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
 
             Intent intent = new Intent(this, MainActivity.class);
