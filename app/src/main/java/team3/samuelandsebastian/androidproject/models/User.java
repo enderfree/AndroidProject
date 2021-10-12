@@ -1,5 +1,6 @@
 package team3.samuelandsebastian.androidproject.models;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
@@ -59,6 +60,12 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Task<Void> insert(){
+        DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
+
+        return firebase.child(collectionName).child(emailAddress).setValue(this);
     }
 
     public static User getUserByEmail(String emailAddress){

@@ -2,6 +2,7 @@ package team3.samuelandsebastian.androidproject;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import team3.samuelandsebastian.androidproject.models.User;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -70,24 +71,48 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         dialog.setTitle("Invalid Registration");
 
         if(editTextFirstName.getText() == null && editTextLastName.getText() == null && editTextEMail.getText() == null && editTextPassword == null && editTextPasswordConfirmation != null){
-            dialog.setMessage("message");
+            dialog.setMessage("Please fill all fields.");
             displayOkDialog(dialog);
             return;
         }
-
-        if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
-            dialog.setMessage("message");
+        else if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
+            dialog.setMessage("Proper names start wit capitals and have at least an other letter!");
             displayOkDialog(dialog);
             return;
         }
-
-        if(!editTextPassword.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
-            dialog.setMessage("message");
+        else if(!editTextEMail.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
+            dialog.setMessage("Invalid Email.");
             displayOkDialog(dialog);
             return;
         }
+        else if(User.getUserByEmail(editTextEMail.getText().toString()) != null){
+            dialog.setMessage("Don't you already have an account?");
+            displayOkDialog(dialog);
+            return;
+        }
+        else if(editTextPassword.getText().toString().length() < 8){
+            dialog.setMessage("Password too short!");
+            displayOkDialog(dialog);
+            return;
+        }
+        else if(!editTextPassword.getText().toString().equals(editTextPasswordConfirmation.getText().toString())){
+            dialog.setMessage("Both passwords didn't match!");
+            displayOkDialog(dialog);
+            return;
+        }
+        else{
+            String firstName = editTextFirstName.getText().toString();
+            String lastName = editTextLastName.getText().toString();
+            String email = editTextEMail.getText().toString();
+            String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-        //need access to db in order to check uniqueness of password
+            new User(firstName, lastName, email, password).insert();
+            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void buttonCancelAction(){
