@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class DataModel implements Serializable {
+    private static String collectionName = "History";
+
     private String word;
     private List<Result> results;
 
