@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import team3.samuelandsebastian.androidproject.adapter.RecyclerAdapter;
+import team3.samuelandsebastian.androidproject.listener.RecyclerItemClickListener;
 import team3.samuelandsebastian.androidproject.models.Word;
 
 public class MainApiActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,17 +51,36 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setLayoutManager(layoutManager);
         recyclerAdapter = new RecyclerAdapter(words);
         recyclerView.setAdapter(recyclerAdapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
+                        intent.putExtra("data", words.get(position));
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        words.get(position).delete();
+                        words.remove(position);
+                        recyclerAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }));
     }
 
     private void loadWords() {
         Word.findAll().addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 words.clear();
                 for(DataSnapshot snap : snapshot.getChildren()) {
-                    Word word = snap.getValue(Word.class);
-                    Log.i("Word: ", word.getWord());
                     words.add(snap.getValue(Word.class));
                 }
                 Collections.reverse(words);

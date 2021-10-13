@@ -42,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Word word = words.get(position);
         holder.word.setText(word.getWord());
-        holder.nbOfResults.setText(word.getResults().size() + " Result(s)");
+        holder.nbOfResults.setText(word.getResults().size() + (word.getResults().size() == 1 ? " Result" : " Results"));
         holder.date.setText(word.getDate());
     }
 
