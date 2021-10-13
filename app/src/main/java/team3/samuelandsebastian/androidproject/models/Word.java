@@ -21,11 +21,20 @@ public class Word implements Serializable {
     private List<WordResult> results;
     private long timeInMillis;
     private String id;
+    private String userId;
 
     public Word(String word, List<WordResult> results) {
         this.word = word;
         this.results = results;
         this.timeInMillis = System.currentTimeMillis();
+        this.userId = "admin";
+    }
+
+    public Word(String word, List<WordResult> results, String userId) {
+        this.word = word;
+        this.results = results;
+        this.timeInMillis = System.currentTimeMillis();
+        this.userId = userId;
     }
 
     public Word() {} //need for some things we called
@@ -44,6 +53,10 @@ public class Word implements Serializable {
 
     public long getTimeInMillis() {
         return this.timeInMillis;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
     public String getWord() {
@@ -73,5 +86,10 @@ public class Word implements Serializable {
     public static Query findAll() {
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
         return firebase.child(collectionName).orderByChild("timeInMillis");
+    }
+
+    public static Query findAllWithUserId(String userId) {
+        DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
+        return firebase.child(collectionName).orderByChild("userId").equalTo(userId);
     }
 }

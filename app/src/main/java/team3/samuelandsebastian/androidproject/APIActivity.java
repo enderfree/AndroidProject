@@ -2,7 +2,9 @@ package team3.samuelandsebastian.androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import team3.samuelandsebastian.androidproject.api.IWordAPI;
+import team3.samuelandsebastian.androidproject.models.User;
 import team3.samuelandsebastian.androidproject.models.Word;
 import team3.samuelandsebastian.androidproject.models.WordResult;
 
@@ -36,6 +39,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
     private Button buttonSrch;
     private EditText editTextWord;
     private CheckBox chBoxSave;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,10 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void init() {
+        Gson gson = new Gson();
+        SharedPreferences sp = getSharedPreferences("account", Context.MODE_PRIVATE);
+        currentUser = gson.fromJson(sp.getString("user", ""), User.class);
+
         buttonSrch = findViewById(R.id.buttonSrch);
         editTextWord = findViewById(R.id.txtWord);
         chBoxSave = findViewById(R.id.chBoxSave);
@@ -113,7 +121,11 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                         );
                         wordResultList.add(wordResultObj);
                     }
-                    word = new Word(wordStr, wordResultList);
+                    if(MainActivity.isDevMode())
+                        word = new Word(wordStr, wordResultList);
+                    else
+                        word = new Word(wordStr, wordResultList, currentUser.getId());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getBaseContext(), "Error fetching data! \n" + e.toString(), Toast.LENGTH_LONG).show();

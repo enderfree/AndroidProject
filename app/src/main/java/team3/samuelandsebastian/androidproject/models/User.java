@@ -36,7 +36,6 @@ public class User {
     public User() {} //actually needed for some thing we called
 
     //Getters and setters
-    @Exclude
     public String getId() {
         return id;
     }

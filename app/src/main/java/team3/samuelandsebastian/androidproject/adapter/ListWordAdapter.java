@@ -35,8 +35,6 @@ public class ListWordAdapter extends ArrayAdapter<WordResult> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflating grid_item inside our view for this cell at position "i"
-
-
         if (view == null) {
             if(currentSelectedCell == position) {
                 view = inflater.inflate(R.layout.cell_item_info, null);

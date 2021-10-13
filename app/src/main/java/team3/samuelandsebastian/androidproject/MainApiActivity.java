@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,12 +21,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import team3.samuelandsebastian.androidproject.adapter.RecyclerAdapter;
 import team3.samuelandsebastian.androidproject.listener.RecyclerItemClickListener;
+import team3.samuelandsebastian.androidproject.models.User;
 import team3.samuelandsebastian.androidproject.models.Word;
 
 public class MainApiActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,6 +37,7 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView recyclerView;
     private ArrayList<Word> words = new ArrayList<>(); //history
     private RecyclerAdapter recyclerAdapter;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,10 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void init() {
+        Gson gson = new Gson();
+        SharedPreferences sp = getSharedPreferences("account", Context.MODE_PRIVATE);
+        currentUser = gson.fromJson(sp.getString("user", ""), User.class);
+
         fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(this);
         recyclerView = findViewById(R.id.recyclerView);
@@ -66,18 +75,15 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onLongItemClick(View view, int position) {
 
-                        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        words.get(position).delete();
-                                        words.remove(position);
-                                        recyclerAdapter.notifyDataSetChanged();
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        break;
-                                }
+                        DialogInterface.OnClickListener dialogListener = (dialog, which) -> {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    words.get(position).delete();
+                                    words.remove(position);
+                                    recyclerAdapter.notifyDataSetChanged();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
                             }
                         };
 
@@ -96,14 +102,14 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadWords() {
-        Word.findAll().addValueEventListener(new ValueEventListener() {
+        Word.findAllWithUserId(MainActivity.isDevMode() ? "admin" : currentUser.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 words.clear();
                 for(DataSnapshot snap : snapshot.getChildren()) {
                     words.add(snap.getValue(Word.class));
                 }
-                Collections.reverse(words);
+                //Collections.reverse(words);
                 recyclerAdapter.notifyDataSetChanged();
             }
 

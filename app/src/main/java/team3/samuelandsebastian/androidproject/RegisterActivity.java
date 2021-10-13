@@ -60,12 +60,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void displayOkDialog(AlertDialog.Builder dialog){ //I only want an ok button that does nothing in all of these cases so I made a method for it
-        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //disappear
-            }
-        });
+        // Can replace the listener by null since we don't want it to do anything.
+        dialog.setPositiveButton("Ok", null);
         dialog.create();
         dialog.show();
     }

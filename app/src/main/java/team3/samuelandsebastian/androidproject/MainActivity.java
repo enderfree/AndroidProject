@@ -5,8 +5,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import team3.samuelandsebastian.androidproject.models.User;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +18,13 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin, buttonRegister ,bypassBtn;
+
+    private static boolean DEV_MODE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 registerAction();
                 break;
             case R.id.bypassBtn: //for testing
+                DEV_MODE = true;
                 openAPIActivity();
                 break;
             default:
@@ -64,12 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Invalid Credentials");
         dialog.setMessage("The email and password you used doesn't match!");
-        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //disappear
-            }
-        });
+
+        // Can set listener to null since it doesn't do anything.
+        dialog.setPositiveButton("Ok", null);
         dialog.create();
         dialog.show();
     }
@@ -79,9 +82,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int i = 0;
-                for (DataSnapshot user: snapshot.getChildren()) {
+                for (DataSnapshot snap: snapshot.getChildren()) {
                     String currentPassword = "" + editTextPassword.getText().toString().hashCode() * editTextEmail.getText().toString().hashCode();
-                    if(user.getValue(User.class).getPassword().equals(currentPassword)){
+                    User user = snap.getValue(User.class);
+                    if(user.getPassword().equals(currentPassword)) {
+
+                        // Store the current user in the sharedpreferences.
+                        SharedPreferences sp = getSharedPreferences("account", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        Gson gson = new Gson();
+                        String userJson = gson.toJson(user);
+                        editor.putString("user", userJson);
+                        editor.commit();
+                        DEV_MODE = false;
                         openAPIActivity();
                     }
                     else { //The fact that this may get called more than once isn't a problem since email should be unique... just don't use 123@123.com
@@ -111,5 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void openAPIActivity() {
         Intent intent = new Intent(this, MainApiActivity.class);
         startActivity(intent);
+    }
+
+    public static boolean isDevMode() {
+        return DEV_MODE;
     }
 }
