@@ -61,9 +61,9 @@ public class Word implements Serializable {
                 .setValue(this);
     }
 
-    public Task<Void> delete() {
+    public void delete() {
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
-        return firebase.child(collectionName)
+        firebase.child(collectionName)
                 .child(this.id)
                 .removeValue();
     }
