@@ -1,5 +1,7 @@
 package team3.samuelandsebastian.androidproject.models;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +32,7 @@ public class User {
         this.password = password;
     }
 
+    @Exclude
     public String getId() {
         return id;
     }
@@ -38,7 +41,6 @@ public class User {
         this.id = id;
     }
 
-    @Exclude
     public static String getCollectionName() {
         return collectionName;
     }
@@ -85,7 +87,12 @@ public class User {
         return firebase.child(collectionName).child(id).setValue(this);
     }
 
+    //public static boolean findIfCredentialsAreValid(String emailAddress, String password){
+
+    //}
+
     private static boolean unique = true;
+    private static boolean asyncDone = false;
     public static boolean findIfEMailIsUnique(String emailAddress){
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
 
@@ -94,18 +101,24 @@ public class User {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot user: snapshot.getChildren()){
-                    if(user.child("emailAddress").toString().equals(emailAddress)){
-                        unique =false;
+                    Log.i(user.child("emailAddress").getValue().toString(), emailAddress);
+                    if(user.child("emailAddress").getValue().toString().equals(emailAddress)){
+                        unique = false; //This thing is async so I am simply getting my value to late!
                     }
                 }
+                asyncDone = true;
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                asyncDone = true;
             }
         });
 
+        while (!asyncDone){}
+        asyncDone = false;
+
+        Log.i("Before Return", "" + unique);
         if (unique){
             return true;
         }

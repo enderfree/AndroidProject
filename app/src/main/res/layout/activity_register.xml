@@ -37,9 +37,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:hint="First Name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="Name"
         app:layout_constraintEnd_toStartOf="@+id/guideline50"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -51,9 +51,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:ems="10"
+        android:hint="Last Name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline50"
         app:layout_constraintTop_toTopOf="@+id/editTextRegisterFirstName" />
