@@ -35,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Bypass"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/buttonRegister"
             app:layout_constraintStart_toStartOf="@+id/buttonRegister"
             app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
