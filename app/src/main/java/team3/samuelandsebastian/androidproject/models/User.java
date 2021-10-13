@@ -33,8 +33,9 @@ public class User {
         this.password = password;
     }
 
-    public User() {}
+    public User() {} //actually needed for some thing we called
 
+    //Getters and setters
     @Exclude
     public String getId() {
         return id;
@@ -84,13 +85,14 @@ public class User {
         this.password = password;
     }
 
+    //Query
     public Task<Void> insert(){
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
 
         return firebase.child(collectionName).child(id).setValue(this);
     }
 
-    public static Query findByEmail(String emailAddress) {
+    public static Query findByEmail(String emailAddress) { //don't expend here... async!
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
         return firebase.child(collectionName).orderByChild("emailAddress").equalTo(emailAddress);
     }

@@ -64,7 +64,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
         String wordStr = editTextWord.getText().toString();
 
         if(wordStr.isEmpty()) {
-            Toast.makeText(getBaseContext(), "You need to enter a wordStr", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "You need to enter a word for us to search!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -120,7 +120,7 @@ public class APIActivity extends AppCompatActivity implements View.OnClickListen
                     return;
                 }
 
-                // Added this for testing purposes can delete later...
+                // Added this for testing purposes can delete later... //I like it, lets keep it, it's not like it has a large impact and it helps to trace
                 for(int i = 0; i < word.getResults().size(); i++) {
                     Log.i("Definition #" + (i + 1), word.getResults().get(i).getDefinition());
                 }

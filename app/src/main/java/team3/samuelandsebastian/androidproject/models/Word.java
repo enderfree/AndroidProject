@@ -28,8 +28,9 @@ public class Word implements Serializable {
         this.timeInMillis = System.currentTimeMillis();
     }
 
-    public Word() {}
+    public Word() {} //need for some things we called
 
+    //getters and setters
     public String getId() {
         return id;
     }
@@ -61,6 +62,7 @@ public class Word implements Serializable {
                 .setValue(this);
     }
 
+    // Query
     public void delete() {
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
         firebase.child(collectionName)

@@ -31,7 +31,7 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
 
     private FloatingActionButton fabAdd;
     private RecyclerView recyclerView;
-    private ArrayList<Word> words = new ArrayList<>();
+    private ArrayList<Word> words = new ArrayList<>(); //history
     private RecyclerAdapter recyclerAdapter;
 
     @Override
@@ -39,8 +39,8 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_api);
         init();
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        recyclerView.setHasFixedSize(true); //that's why I had problem fixing displays!... I don't dare to touch it now that I bypassed it...
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL)); //nice style
         loadWords();
     }
 
@@ -59,7 +59,7 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(getBaseContext(), WordViewActivity.class);
-                        intent.putExtra("data", words.get(position));
+                        intent.putExtra("data", words.get(position)); //send one word to WordViewActivity
                         startActivity(intent);
                     }
 
@@ -109,7 +109,7 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                //We still don't care
             }
         });
     }

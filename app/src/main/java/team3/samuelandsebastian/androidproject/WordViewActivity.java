@@ -15,6 +15,7 @@ public class WordViewActivity extends AppCompatActivity implements AdapterView.O
     private ListView wordListView;
     private ListWordAdapter wordAdapter;
     private Word model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,7 @@ public class WordViewActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(wordAdapter.getCurrentSelectedCell() == position) {
-            wordAdapter = new ListWordAdapter(this, model, -1);
+            wordAdapter = new ListWordAdapter(this, model, -1); //close the cell if it is not the selected one
         } else {
             wordAdapter = new ListWordAdapter(this, model, position);
         }

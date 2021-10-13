@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseDAO {
+    //We're not using auth in the end
     private static DatabaseReference databaseReference;
 
     public static DatabaseReference getDatabaseReference(){

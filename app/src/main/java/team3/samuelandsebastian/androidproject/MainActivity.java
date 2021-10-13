@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonRegister:
                 registerAction();
                 break;
-            case R.id.bypassBtn:
+            case R.id.bypassBtn: //for testing
                 openAPIActivity();
                 break;
             default:
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void invalidCredentials(){
+    private void invalidCredentials(){ //That's a lot of code for one box! I need it twice...
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Invalid Credentials");
         dialog.setMessage("The email and password you used doesn't match!");
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                //don't care but obligatory override
             }
         });
     }

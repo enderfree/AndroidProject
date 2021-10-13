@@ -16,8 +16,9 @@ public class WordResult implements Serializable {
         this.examples = examples;
     }
 
-    public WordResult() {}
+    public WordResult() {} //needed for some things we called
 
+    //getters (the composition here makes the getters facultative so we took them off since we don't use them)
     public String getPartOfSpeech() {
         return partOfSpeech;
     }

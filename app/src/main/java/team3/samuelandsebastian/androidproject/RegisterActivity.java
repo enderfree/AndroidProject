@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void displayOkDialog(AlertDialog.Builder dialog){
+    private void displayOkDialog(AlertDialog.Builder dialog){ //I only want an ok button that does nothing in all of these cases so I made a method for it
         dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -76,42 +76,43 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Invalid Registration");
 
+        //With this if else, I check if the condition is invalid! If it is, I warn!
         if(editTextFirstName.getText() == null && editTextLastName.getText() == null && editTextEMail.getText() == null && editTextPassword == null && editTextPasswordConfirmation != null){
-            dialog.setMessage("Please fill all fields.");
+            dialog.setMessage("Please fill all fields."); //No fields are left empty
             displayOkDialog(dialog);
         }
         else if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
-            dialog.setMessage("Proper names start wit capitals and have at least an other letter!");
+            dialog.setMessage("Proper names start wit capitals and have at least an other letter!"); //First name and last name are well formated
             displayOkDialog(dialog);
         }
         else if(!editTextEMail.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
-            dialog.setMessage("Invalid Email.");
+            dialog.setMessage("Invalid Email."); //the email is a valid email
             displayOkDialog(dialog);
         }
 
-        else if(editTextPassword.getText().toString().length() < 8){
+        else if(editTextPassword.getText().toString().length() < 8){ //Password is 8 char or more
             dialog.setMessage("Password too short!");
             displayOkDialog(dialog);
         }
         else if(!editTextPassword.getText().toString().equals(editTextPasswordConfirmation.getText().toString())){
-            dialog.setMessage("Both passwords didn't match!");
+            dialog.setMessage("Both passwords didn't match!"); //you types twice the same password
             displayOkDialog(dialog);
         }
         else {
             User.findByEmail(editTextEMail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
+                @Override //This email is not already in the database
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()) {
                         dialog.setMessage("Don't you already have an account?");
                         displayOkDialog(dialog);
-                    } else {
+                    } else { //Valid!
                         String firstName = editTextFirstName.getText().toString();
                         String lastName = editTextLastName.getText().toString();
-                        String email = editTextEMail.getText().toString();
+                        String email = editTextEMail.getText().toString(); //hashing on next line
                         String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
                         try {
-                            new User(firstName, lastName, email, password).insert();
+                            new User(firstName, lastName, email, password).insert(); //create and destroy! no wastes!
                         }
                         catch (Exception e){
                             Log.i("error", e.getMessage());
@@ -127,13 +128,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    //don't care but obligatory
                 }
             });
         }
     }
 
-    private void buttonCancelAction(){
+    private void buttonCancelAction(){ //return to the main activity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
