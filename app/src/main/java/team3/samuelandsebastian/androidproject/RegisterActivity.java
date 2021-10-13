@@ -76,36 +76,28 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Invalid Registration");
 
-        boolean valid = true;
-
         if(editTextFirstName.getText() == null && editTextLastName.getText() == null && editTextEMail.getText() == null && editTextPassword == null && editTextPasswordConfirmation != null){
             dialog.setMessage("Please fill all fields.");
             displayOkDialog(dialog);
-            valid = false;
         }
         else if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
             dialog.setMessage("Proper names start wit capitals and have at least an other letter!");
             displayOkDialog(dialog);
-            valid = false;
         }
         else if(!editTextEMail.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
             dialog.setMessage("Invalid Email.");
             displayOkDialog(dialog);
-            valid = false;
         }
 
         else if(editTextPassword.getText().toString().length() < 8){
             dialog.setMessage("Password too short!");
             displayOkDialog(dialog);
-            valid = false;
         }
         else if(!editTextPassword.getText().toString().equals(editTextPasswordConfirmation.getText().toString())){
             dialog.setMessage("Both passwords didn't match!");
             displayOkDialog(dialog);
-            valid = false;
         }
-
-        if(valid) {
+        else {
             User.findByEmail(editTextEMail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
