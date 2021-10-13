@@ -1,5 +1,6 @@
 package team3.samuelandsebastian.androidproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import team3.samuelandsebastian.androidproject.models.User;
@@ -12,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText editTextFirstName, editTextLastName, editTextEMail, editTextPassword, editTextPasswordConfirmation;
@@ -71,54 +76,68 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Invalid Registration");
 
+        boolean valid = true;
+
         if(editTextFirstName.getText() == null && editTextLastName.getText() == null && editTextEMail.getText() == null && editTextPassword == null && editTextPasswordConfirmation != null){
             dialog.setMessage("Please fill all fields.");
             displayOkDialog(dialog);
-            return;
+            valid = false;
         }
         else if(!(editTextFirstName.getText().toString().matches("^[A-Z]\\w+") && editTextLastName.getText().toString().matches("^[A-Z]\\w+"))){
             dialog.setMessage("Proper names start wit capitals and have at least an other letter!");
             displayOkDialog(dialog);
-            return;
+            valid = false;
         }
         else if(!editTextEMail.getText().toString().matches("^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9.]+$")){
             dialog.setMessage("Invalid Email.");
             displayOkDialog(dialog);
-            return;
+            valid = false;
         }
-        else if(!User.findIfEMailIsUnique(editTextEMail.getText().toString())){
-            dialog.setMessage("Don't you already have an account?");
-            displayOkDialog(dialog);
-            return;
-        }
+
         else if(editTextPassword.getText().toString().length() < 8){
             dialog.setMessage("Password too short!");
             displayOkDialog(dialog);
-            return;
+            valid = false;
         }
         else if(!editTextPassword.getText().toString().equals(editTextPasswordConfirmation.getText().toString())){
             dialog.setMessage("Both passwords didn't match!");
             displayOkDialog(dialog);
-            return;
+            valid = false;
         }
-        else{
-            String firstName = editTextFirstName.getText().toString();
-            String lastName = editTextLastName.getText().toString();
-            String email = editTextEMail.getText().toString();
-            String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-            try {
-                new User(firstName, lastName, email, password).insert();
-            }
-            catch (Exception e){
-                Log.i("error", e.getMessage());
-            }
+        if(valid) {
+            User.findByEmail(editTextEMail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        dialog.setMessage("Don't you already have an account?");
+                        displayOkDialog(dialog);
+                    } else {
+                        String firstName = editTextFirstName.getText().toString();
+                        String lastName = editTextLastName.getText().toString();
+                        String email = editTextEMail.getText().toString();
+                        String password = "" + editTextPassword.getText().toString().hashCode() * editTextEMail.getText().toString().hashCode();
 
-            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                        try {
+                            new User(firstName, lastName, email, password).insert();
+                        }
+                        catch (Exception e){
+                            Log.i("error", e.getMessage());
+                        }
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+                        Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
 

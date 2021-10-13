@@ -2,6 +2,8 @@ package team3.samuelandsebastian.androidproject.models;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,7 +14,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
-import androidx.annotation.NonNull;
 import team3.samuelandsebastian.androidproject.service.FirebaseDAO;
 
 public class User {
@@ -31,6 +32,8 @@ public class User {
         this.emailAddress = emailAddress;
         this.password = password;
     }
+
+    public User() {}
 
     @Exclude
     public String getId() {
@@ -87,44 +90,8 @@ public class User {
         return firebase.child(collectionName).child(id).setValue(this);
     }
 
-    //public static boolean findIfCredentialsAreValid(String emailAddress, String password){
-
-    //}
-
-    private static boolean unique = true;
-    private static boolean asyncDone = false;
-    public static boolean findIfEMailIsUnique(String emailAddress){
+    public static Query findByEmail(String emailAddress) {
         DatabaseReference firebase = FirebaseDAO.getDatabaseReference();
-
-
-        firebase.child(collectionName).orderByKey().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot user: snapshot.getChildren()){
-                    Log.i(user.child("emailAddress").getValue().toString(), emailAddress);
-                    if(user.child("emailAddress").getValue().toString().equals(emailAddress)){
-                        unique = false; //This thing is async so I am simply getting my value to late!
-                    }
-                }
-                asyncDone = true;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                asyncDone = true;
-            }
-        });
-
-        while (!asyncDone){}
-        asyncDone = false;
-
-        Log.i("Before Return", "" + unique);
-        if (unique){
-            return true;
-        }
-
-        unique = true;
-
-        return false;
+        return firebase.child(collectionName).orderByChild("emailAddress").equalTo(emailAddress);
     }
 }

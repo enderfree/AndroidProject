@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,9 +65,27 @@ public class MainApiActivity extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        words.get(position).delete();
-                        words.remove(position);
-                        recyclerAdapter.notifyDataSetChanged();
+
+                        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        words.get(position).delete();
+                                        words.remove(position);
+                                        recyclerAdapter.notifyDataSetChanged();
+                                        break;
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        break;
+                                }
+                            }
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainApiActivity.this);
+                        builder.setMessage("Are you sure you want to delete this row?")
+                                .setPositiveButton("yes", dialogListener)
+                                .setNegativeButton("No", dialogListener)
+                                .show();
                     }
 
                     @Override
